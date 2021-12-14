@@ -28,8 +28,6 @@ def load_data(path):
 
     print('Load data.')
     data = np.genfromtxt(path, delimiter=',')
-    n_samples = len(data)
-    print('Number of samples:', n_samples)
     x = data[1:, 0:-1]
     y = data[1:, -1].astype(int)
 
@@ -37,63 +35,70 @@ def load_data(path):
 
     return x, y
 
-# def preprocessing(x, y, random_state=1):
-#     # Split dataset
-#     # ===================== PLEASE WRITE HERE =====================
+def preprocessing(x, y, random_state=1):
+    # Split dataset
+    # ===================== PLEASE WRITE HERE =====================
+
+    train_ratio = 0.8
+    validation_ratio = 0.1
+    test_ratio = 0.1
+    x_train0, x_test0, y_train, y_test = train_test_split(x, y, test_size=1-train_ratio, random_state = random_state)
+    x_val0, x_test0, y_val, y_test = train_test_split(x_test0, y_test, test_size=test_ratio/(test_ratio + validation_ratio))
+    
+    # ===================== PLEASE WRITE HERE =====================
+
+
+    # Feature scaling
+    # ===================== PLEASE WRITE HERE =====================
+
+    scaler = StandardScaler().fit(x_train0)
+    x_train = scaler.transform(x_train0)
+    x_val = scaler.transform(x_val0)
+    x_test = scaler.transform(x_test0)
+
+    # ===================== PLEASE WRITE HERE =====================
+
+    return x_train, x_val, x_test, y_train, y_val, y_test
+
+def train(x_train, x_val, y_train, y_val, layers, n_epochs):
+    print('Hidden layers:', layers)
+    print('# epochs:', n_epochs)
+
+    # Initialize arrays, which will be used to store loss and acc at each epoch
+    train_loss = np.zeros(n_epochs)
+    train_acc = np.zeros(n_epochs)
+    val_loss = np.zeros(n_epochs)
+    val_acc = np.zeros(n_epochs)
+
+    # Define MLP classifier
+    clf = MLPClassifier(hidden_layer_sizes=layers, random_state=2,
+                        max_iter=1, warm_start=True)
+
+    for i in tqdm(range(n_epochs)):
+        # Training
+        # ===================== PLEASE WRITE HERE =====================
 
 
 
-#     # ===================== PLEASE WRITE HERE =====================
+        # ===================== PLEASE WRITE HERE =====================
 
 
-#     # Feature scaling
-#     # ===================== PLEASE WRITE HERE =====================
-
-
-
-#     # ===================== PLEASE WRITE HERE =====================
-
-#     return x_train, x_val, x_test, y_train, y_val, y_test
-
-# def train(x_train, x_val, y_train, y_val, layers, n_epochs):
-#     print('Hidden layers:', layers)
-#     print('# epochs:', n_epochs)
-
-#     # Initialize arrays, which will be used to store loss and acc at each epoch
-#     train_loss = np.zeros(n_epochs)
-#     train_acc = np.zeros(n_epochs)
-#     val_loss = np.zeros(n_epochs)
-#     val_acc = np.zeros(n_epochs)
-
-#     # Define MLP classifier
-#     clf = MLPClassifier(hidden_layer_sizes=layers, random_state=2,
-#                         max_iter=1, warm_start=True)
-
-#     for i in tqdm(range(n_epochs)):
-#         # Training
-#         # ===================== PLEASE WRITE HERE =====================
+        # Evaluation on the training set
+        # ===================== PLEASE WRITE HERE =====================
 
 
 
-#         # ===================== PLEASE WRITE HERE =====================
+        # ===================== PLEASE WRITE HERE =====================
 
 
-#         # Evaluation on the training set
-#         # ===================== PLEASE WRITE HERE =====================
-
-
-
-#         # ===================== PLEASE WRITE HERE =====================
-
-
-#         # Evaluation on the validation set
-#         # ===================== PLEASE WRITE HERE =====================
+        # Evaluation on the validation set
+        # ===================== PLEASE WRITE HERE =====================
 
 
 
-#         # ===================== PLEASE WRITE HERE =====================
+        # ===================== PLEASE WRITE HERE =====================
 
-#     return clf, train_loss, train_acc, val_loss, val_acc
+    return clf, train_loss, train_acc, val_loss, val_acc
 
 # def evaluation(clf, x, y):
 #     # Get predictions
@@ -144,14 +149,14 @@ if __name__=='__main__':
     # Load data
     x, y = load_data('data.csv')
 
-    # # Preprocessing
-    # x_train, x_val, x_test, y_train, y_val, y_test = preprocessing(x, y)
+    # Preprocessing
+    x_train, x_val, x_test, y_train, y_val, y_test = preprocessing(x, y)
 
-    # # Training
-    # hidden_layer_sizes = (16, 16, 16)
-    # n_epochs = 100
-    # clf, train_loss, train_acc, val_loss, val_acc = train(
-    #     x_train, x_val, y_train, y_val, hidden_layer_sizes, n_epochs)
+    # Training
+    hidden_layer_sizes = (16, 16, 16)
+    n_epochs = 100
+    clf, train_loss, train_acc, val_loss, val_acc = train(
+        x_train, x_val, y_train, y_val, hidden_layer_sizes, n_epochs)
 
     # # Loss and accuracy curve
     # plot_curve(train_loss, val_loss, 'Log Loss', 'upper right')

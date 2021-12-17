@@ -85,8 +85,12 @@ def train(x_train, x_val, y_train, y_val, layers, n_epochs):
 
         # Evaluation on the training set
         # ===================== PLEASE WRITE HERE =====================
-
         
+        train_acc_iteration = clf.score(x_train, y_train)
+        train_acc[i] = train_acc_iteration
+
+        train_loss_iteration = log_loss(y_train, clf.predict_proba(x_train))
+        train_loss[i] = train_loss_iteration 
 
         # ===================== PLEASE WRITE HERE =====================
 
@@ -94,38 +98,42 @@ def train(x_train, x_val, y_train, y_val, layers, n_epochs):
         # Evaluation on the validation set
         # ===================== PLEASE WRITE HERE =====================
 
-        
+        val_acc_iteration = clf.score(x_val, y_val)
+        val_acc[i] = val_acc_iteration
 
-        # ===================== PLEASE WRITE HERE =====================
+        val_loss_iteration = log_loss(y_val, clf.predict_proba(x_val))
+        val_loss[i] = val_loss_iteration 
+
+        # ===================== PLEASE WRITE HERE ===val_acc==================
 
     return clf, train_loss, train_acc, val_loss, val_acc
 
-# def evaluation(clf, x, y):
-#     # Get predictions
-#     # ===================== PLEASE WRITE HERE =====================
+def evaluation(clf, x, y):
+    # Get predictions
+    # ===================== PLEASE WRITE HERE =====================
 
-    
+    y_pred = clf.predict(x)
 
-#     # ===================== PLEASE WRITE HERE =====================
+    # ===================== PLEASE WRITE HERE =====================
 
 
-#     # Scores
-#     # ===================== PLEASE WRITE HERE =====================
-#     # Recall of each class
-#     recalls =
+    # Scores
+    # ===================== PLEASE WRITE HERE =====================
+    # Recall of each class
+    recalls = recall_score(y, y_pred, labels = [1, 2, 3, 4, 5], average = None)
 
-#     # Accuracy
-#     acc =
+    # Accuracy
+    acc = clf.score(x, y)
 
-#     # Unweighted Average Recall (UAR)
-#     uar =
+    # Unweighted Average Recall (UAR)
+    uar = recall_score(y, y_pred, labels = [1, 2, 3, 4, 5], average = 'macro')
 
-#     # Confusion matrix
-#     cf_matrix =
+    # Confusion matrix
+    cf_matrix = confusion_matrix(y,y_pred)
 
-#     # ===================== PLEASE WRITE HERE =====================
+    # ===================== PLEASE WRITE HERE =====================
 
-#     return recalls, acc, uar, cf_matrix
+    return recalls, acc, uar, cf_matrix
 
 def plot_curve(train, val, title, legend_loc):
     plt.plot(train, color='c', label='Train')
@@ -166,13 +174,13 @@ if __name__=='__main__':
     print('======== Validation Set ========')
     # Loss
     print('Loss:', round(val_loss[-1], 3))
-    # # Recall, accuracy, UAR
-    # recalls, acc, uar, cf_matrix = evaluation(clf, x_val, y_val)
-    # print('Recalls:', np.round(recalls, 3))
-    # print('Accuracy', round(acc, 3))
-    # print('UAR:', round(uar, 3))
-    # # Confusion matrix
-    # plot_heatmap(cf_matrix)
+    # Recall, accuracy, UAR
+    recalls, acc, uar, cf_matrix = evaluation(clf, x_val, y_val)
+    print('Recalls:', np.round(recalls, 3))
+    print('Accuracy', round(acc, 3))
+    print('UAR:', round(uar, 3))
+    # Confusion matrix
+    plot_heatmap(cf_matrix)
 
     # Evaluation on testing set
     """

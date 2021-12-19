@@ -1,8 +1,7 @@
 """
 ===================== PLEASE WRITE HERE =====================
-- The title of this script.
-- A brief explanation of this script, e.g. the purpose of this script, what
-can this script achieve or solve, what algorithms are used in this script...
+- Practice using MLP Classifier 
+- Distinguish the performance(accuracy, process times, loss) between MLP models with different parameters. 
 
 - Author:曾靖桐 Date:2021.12.08
 ===================== PLEASE WRITE HERE =====================
@@ -43,7 +42,7 @@ def preprocessing(x, y, random_state=1):
     validation_ratio = 0.1
     test_ratio = 0.1
     x_train0, x_test0, y_train, y_test = train_test_split(x, y, test_size=1-train_ratio, random_state = random_state)
-    x_val0, x_test0, y_val, y_test = train_test_split(x_test0, y_test, test_size=test_ratio/(test_ratio + validation_ratio))
+    x_val0, x_test0, y_val, y_test = train_test_split(x_test0, y_test, test_size=test_ratio/(test_ratio + validation_ratio), random_state = random_state)
     
     # ===================== PLEASE WRITE HERE =====================
 
